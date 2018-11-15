@@ -1,12 +1,12 @@
 `timescale 1ns / 1ps
 
 module adder_2(
-    input [1:0] a,
-    input [1:0] b,
-    input c_in,
-    output [1:0] s,
-    output c_out
-    );
+	input [1:0] a,
+	input [1:0] b,
+	input c_in,
+	output [1:0] s,
+	output c_out
+);
 	 
 	wire c_ripple;
 	
@@ -18,7 +18,7 @@ module adder_2(
 		.c_out(c_ripple)
 	);
 						  
-	 full_adder add2(
+	full_adder add2(
 		.a(a[1]),
 		.b(b[1]),
 		.c_in(c_ripple),

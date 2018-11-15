@@ -1,27 +1,5 @@
 `timescale 1ns / 1ps
 
-////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer:
-//
-// Create Date:   02:12:48 10/24/2018
-// Design Name:   adder_32
-// Module Name:   /home/spencer/School/Advanced Processors/ISE/adder_32/adder_32_tb.v
-// Project Name:  adder_32
-// Target Device:  
-// Tool versions:  
-// Description: 
-//
-// Verilog Test Fixture created by ISE for module: adder_32
-//
-// Dependencies:
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 module adder_32_tb;
 
 	// Inputs

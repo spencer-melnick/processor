@@ -1,32 +1,14 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    22:06:17 10/31/2018 
-// Design Name: 
-// Module Name:    multiplier_32 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+
 module multiplier_32(
 	output reg [63:0] p,
 	output reg dne,
-   input [31:0] a,
-   input [31:0] b,
-   input clk,
+   	input [31:0] a,
+   	input [31:0] b,
+   	input clk,
 	input ena,
-   input rst
-   );
+  	input rst
+   	);
 	
 	reg [31:0] multiplier;
 	reg [31:0] multiplicand;

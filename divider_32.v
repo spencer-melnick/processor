@@ -1,33 +1,15 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    19:42:50 11/13/2018 
-// Design Name: 
-// Module Name:    divider_32 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+
 module divider_32(
-   output reg [31:0] q,
+   	output reg [31:0] q,
 	output reg [31:0] r,
-   output reg dne,
-   input [31:0] a,
-   input [31:0] b,
-   input clk,
-   input rst,
-   input ena
-   );
+   	output reg dne,
+   	input [31:0] a,
+   	input [31:0] b,
+   	input clk,
+   	input rst,
+   	input ena
+);
 	 
 	reg [31:0] dividend;
 	reg [63:0] divisor;
