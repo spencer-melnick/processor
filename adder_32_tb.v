@@ -24,6 +24,9 @@ module adder_32_tb;
 	);
 
 	initial begin
+		$dumpfile("adder_32.vcd");
+		$dumpvars;
+
 		// Initialize Inputs
 		a = 0;
 		b = 0;
