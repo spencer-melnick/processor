@@ -10,75 +10,60 @@ module adder_32_tb;
 	// Outputs
 	wire [31:0] s;
 	wire c_out;
-	
-	// Temporaries
-	reg [63:0] errors;
+
+	// Test vector outputs
+	reg [31:0] s_test;
+	reg c_out_test;
+
+	// Test values
+	integer errors;
+	integer vector_file;
+	integer status;
 
 	// Instantiate the Unit Under Test (UUT)
 	adder_32 uut (
+		.s(s), 
+		.c_out(c_out),
 		.a(a), 
 		.b(b), 
-		.c_in(c_in), 
-		.s(s), 
-		.c_out(c_out)
+		.c_in(c_in)
 	);
 
 	initial begin
 		$dumpfile("adder_32.vcd");
 		$dumpvars;
 
-		// Initialize Inputs
+		// Initialize inputs
 		a = 0;
 		b = 0;
 		c_in = 0;
-		errors = 0;
 
-		// Wait 10 ns for global reset to finish
-		#10;
-        
-		// Add stimulus here
-		a = 32'h7fffffff;
-		b = 32'h7fffffff;
-		c_in = 1;
-					
-		#5;
-					
-		if ((s !== 32'hffffffff) || (c_out !== 0)) begin
-			$display("Error: inputs = %d %d %b", a[31:0], b[31:0], c_in);
-			$display("		 outputs = %d %b", s, c_out);
-			$display("		expected = %d %b", 32'hffffffff, 0);
-						
-			errors = errors + 1;
+		// Initialize test values
+		vector_file = $fopen("../tv/adder_32_tv.txt", "r");
+		errors = 0;
+		status = 0;
+
+		// Check test vector file
+		if (!vector_file) begin
+			$display("Error: could not open test vector file");
+			$finish;
 		end
-		
-		
-		a = 0;
-		b = 16;
-		c_in = 0;
-					
+
+		// Wait for global reset
 		#5;
-					
-		if ((s !== 16) || (c_out !== 0)) begin
-			$display("Error: inputs = %d %d %b", a[31:0], b[31:0], c_in);
-			$display("		 outputs = %d %b", s, c_out);
-			$display("		expected = %d %b", 16, 0);
-						
-			errors = errors + 1;
-		end
-		
-		
-		a = 32'hffffffff;
-		b = 32'hffffffff;
-		c_in = 1;
-					
-		#5;
-					
-		if ((s !== 32'hffffffff) || (c_out !== 1)) begin
-			$display("Error: inputs = %d %d %b", a[31:0], b[31:0], c_in);
-			$display("		 outputs = %d %b", s, c_out);
-			$display("		expected = %d %b", 32'hffffffff, 0);
-						
-			errors = errors + 1;
+
+		while (!status) begin
+			status = $fscanf(vector_file, "%d %d %d : %d %d\n", a, b, c_in, s_test, c_out_test);
+			status = $feof(vector_file);
+
+			#5;
+
+			if (s != s_test || c_out != c_out_test) begin
+				$display("Error:");
+				$display("Inputs:               %-11d %-11d %-1d", a, b, c_in);
+				$display("Outputs:              %-11d %-1d", s, c_out);
+				$display("Expected outputs:     %-11d %-1d", s_test, c_out_test);
+			end
 		end
 		
 		if (errors == 0) begin
