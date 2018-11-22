@@ -31,17 +31,18 @@ module divider_32(
 			
 				// Shift quotient left one and increment iteration
 				q = q << 1;
-				iteration = iteration + 1;
 				
 				// If dividend is greater than divisor, subtract
 				// and add 1 to the quotient
-				if (dividend > divisor) begin
+				if (dividend >= divisor) begin
 					dividend = dividend - divisor;
 					q[0] <= 1;
 				end
 				
 				// Shift divisor right
 				divisor = divisor >> 1;
+
+				iteration = iteration + 1;
 				
 				// After 32 iterations, we're done
 				if (iteration == 33) begin
