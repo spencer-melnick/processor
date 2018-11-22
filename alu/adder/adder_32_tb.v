@@ -63,6 +63,7 @@ module adder_32_tb;
 				$display("Inputs:               %-11d %-11d %-1d", a, b, c_in);
 				$display("Outputs:              %-11d %-1d", s, c_out);
 				$display("Expected outputs:     %-11d %-1d", s_test, c_out_test);
+				errors = errors + 1;
 			end
 		end
 		
