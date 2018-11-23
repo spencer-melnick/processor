@@ -1,23 +1,25 @@
 module alu_32(
-    output reg [31:0] result,
-    output reg [31:0] extra,
-    output reg done,
+    output [31:0] result,
+    output [31:0] extra,
+    output done,
     input [31:0] op1,
     input [31:0] op2,
-    input [2:0] control,
+    input [1:0] control,
     input enable,
     input reset,
     input clock
 );
 
     // State registers
-    reg [2:0] last_control;
+    reg [1:0] last_control;
 
     // Operand registers
     reg [31:0] a;
     reg [31:0] b;
+    reg carry_in;
 
     // Control registers
+    reg ripple_reset;
     reg multiply_enable;
     reg divide_enable;
 
@@ -25,23 +27,57 @@ module alu_32(
     // Result registers
 
     // Adder
-    reg [31:0] sum;
-    reg carry_out;
+    wire [31:0] sum;
+    wire carry_out;
 
     // Product
-    reg [63:0] product;
-    reg multiply_done;
+    wire [63:0] product;
+    wire multiply_done;
 
     // Quotient
-    reg [31:0] quotient;
-    reg [31:0] remainder;
-    reg divide_done;
+    wire [31:0] quotient;
+    wire [31:0] remainder;
+    wire divide_done;
+
+    // Modules
+
+    // Multiplexers
+
+    mux_4 result_mux(
+        .data_out(result),
+        .data_0(sum),
+        .data_1(sum),
+        .data_2(product[31:0]),
+        .data_3(quotient),
+        .select(last_control)
+    );
+
+    mux_4 extra_mux(
+        .data_out(extra),
+        .data_0({31'b0, carry_out}),
+        .data_1({31'b0, carry_out}),
+        .data_2(product[63:32]),
+        .data_3(remainder),
+        .select(last_control)
+    );
+
+    mux_4 #(.width(1)) done_mux(
+        .data_out(done),
+        .data_0(1'b1),
+        .data_1(1'b1),
+        .data_2(multiply_done),
+        .data_3(divide_done),
+        .select(last_control)
+    );
+
+    // Arithmetic
 
     adder_32 adder(
         .s(sum),
         .c_out(carry_out),
         .a(a),
-        .b(b)
+        .b(b),
+        .c_in(carry_in)
     );
 
     multiplier_32 multiplier(
@@ -50,7 +86,8 @@ module alu_32(
         .a(a),
         .b(b),
         .clk(clock),
-        .rst(reset)
+        .rst(ripple_reset),
+        .ena(multiply_enable)
     );
 
     divider_32 divider(
@@ -60,7 +97,7 @@ module alu_32(
         .a(a),
         .b(b),
         .clk(clock),
-        .rst(reset),
+        .rst(ripple_reset),
         .ena(divide_enable)
     );
 
@@ -68,32 +105,62 @@ module alu_32(
         last_control = 0;
         a = 0;
         b = 0;
+        carry_in = 0;
     end
 
-    always @(posedge clock) begin
+    always @(posedge reset) begin
         if (enable) begin
-            if (reset) begin
-                // On reset, update operation
+            // On reset, update operation
 
-                // Update internal control
-                last_control <= control;
-                a <= op1;
-                b <= op2;
+            // Update internal control
+            last_control <= control;
 
-                case (control)
-                    // Add operation
-                    1: begin
-                        result <= sum;
-                        extra <= carry_out
-                        done <= 1;
-                    end
+            case (control)
+                // Add operation
+                0: begin
+                    a <= op1;
+                    b <= op2;
+                    carry_in <= 0;
 
-                    // Subtract operation
-                    2: begin
-                        
-                    end
-                endcase
+                    multiply_enable <= 0;
+                    divide_enable <= 0;
+                end
+
+                // Subtract operation
+                1: begin
+                    a <= op1;
+                    b <= ~op2;
+                    carry_in <= 1;
+
+                    multiply_enable <= 0;
+                    divide_enable <= 0;
+                end
+
+                // Multiply operation
+                2: begin
+                    a = op1;
+                    b = op2;
+                    
+                    multiply_enable <= 1;
+                    divide_enable <= 0;
+                end
+
+                // Divide operation
+                3: begin
+                    a = op1;
+                    b = op2;
+                    
+                    multiply_enable <= 0;
+                    divide_enable <= 1;
+                end
+            endcase
+
+            ripple_reset = 1;
         end
+    end
+
+    always @(negedge reset) begin
+        ripple_reset = 0;
     end
 
 endmodule

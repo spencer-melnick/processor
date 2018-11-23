@@ -14,19 +14,21 @@ module divider_32(
 	reg [31:0] dividend;
 	reg [63:0] divisor;
 	reg [6:0] iteration;
+
+	always @(posedge rst) begin
+		dividend <= a;
+		divisor[63:32] <= b;
+		divisor[31:0] <= 0;
+		iteration <= 0;
+		
+		dne <= 0;
+		q <= 0;
+		r <= 0;
+	end
 	
 	always @(posedge clk) begin
 		if (ena) begin
-			if (rst) begin
-				dividend <= a;
-				divisor[63:32] <= b;
-				divisor[31:0] <= 0;
-				iteration <= 0;
-				
-				dne <= 0;
-				q <= 0;
-				r <= 0;
-			end else begin if (!dne)
+			if (!dne) begin
 				// Main operation branch
 			
 				// Shift quotient left one and increment iteration
