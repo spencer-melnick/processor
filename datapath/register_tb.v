@@ -41,7 +41,7 @@ module register_tb;
 
 
 		// Initialize test values
-		vector_file = $fopen("../tv/register_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/register_tv.txt", "r");
 		errors = 0;
 		status = 0;
 

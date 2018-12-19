@@ -28,7 +28,7 @@ module left_shift_tb;
 		data_in = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/left_shift_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/left_shift_tv.txt", "r");
 		errors = 0;
 		status = 0;
 

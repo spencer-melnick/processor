@@ -40,7 +40,7 @@ module mux_4_tb;
         select = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/mux_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/mux_tv.txt", "r");
 		errors = 0;
 		status = 0;
 

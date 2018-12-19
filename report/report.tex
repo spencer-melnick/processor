@@ -17,6 +17,19 @@
 
     \section{Introduction}
 
+    \subsection{Objective}
+
+    The objective of this project is to design a simple, single-cycle
+    processor capable of running a very basic program with a small number
+    of instructions.
+
+    \subsection{Tools}
+
+    This processor design was created and tested using Verilog in both Icarus
+    Verilog and ISE Studio. Diagrams were produced using the draw.io online
+    flowchart software. Images were edited in GIMP, and this report was
+    created using LaTeX.
+
     \section{Modules}
 
     \subsection{Adder}
@@ -643,7 +656,7 @@
     \hfill\\\\
     \begin{figure}[H]
         \centering
-        \includegraphics{../diagrams/alu/alu_32.pdf}
+        \includegraphics[width=\textwidth]{../diagrams/alu/alu_32.pdf}
         \caption{Logical diagram of the 32 bit ALU}
     \end{figure}
 
@@ -672,7 +685,258 @@
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.9\paperwidth,center]{Screenshots/alu_32.png}
-        \caption{Simulation output of 32 ALU}
+        \caption{Simulation output of 32 bit ALU}
+    \end{figure}
+
+
+
+    \subsection{Left Shift}
+
+    \paragraph{Inputs}
+    \begin{itemize}
+        \item Data In - Parameterized Width
+    \end{itemize}
+
+    \paragraph{Outputs}
+    \begin{itemize}
+        \item Data Out - Parameterized Width
+    \end{itemize}
+
+    \paragraph{Functionality}
+    \hfill\\
+
+    The left shift module is a parameterized module, meaning that it has
+    variable width inputs and outputs, as well as variable length shift.
+    These parameters are set during instantiation of the module.
+
+    \paragraph{Testing}
+    \hfill\\
+
+    A 32 bit left shifter, with a shift amount of 2 is tested. The following
+    cases are tested:
+
+    \begin{center}
+        \begin{tabular}{|c||c|}
+            \hline
+            Input & Output
+            \\\hline\hline
+            00000000000000000000000000000000 & 00000000000000000000000000000000
+            \\\hline
+            00000000000000000000000000000001 & 00000000000000000000000000000100
+            \\\hline
+            10000000000000000000000000000000 & 00000000000000000000000000000000
+            \\\hline
+            11000000000000000000000000000000 & 00000000000000000000000000000000
+            \\\hline
+        \end{tabular}
+    \end{center}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\paperwidth,center]{Screenshots/left_shift.png}
+        \caption{Simulation output of 32 bit left shifter}
+    \end{figure}
+
+
+
+    \subsection{4 Input Multiplexer}
+
+    \paragraph{Inputs}
+    \begin{itemize}
+        \item Data In 1 - Parameterized Width
+        \item Data In 2 - Parameterized Width
+        \item Data In 3 - Parameterized Width
+        \item Data In 4 - Parameterized Width
+        \item Select - 2 bit
+    \end{itemize}
+
+    \paragraph{Outputs}
+    \begin{itemize}
+        \item Data Out - Parameterized Width
+    \end{itemize}
+
+    \paragraph{Functionality}
+    \hfill\\
+
+    The 4 input multiplexer is a parameterized module, meaning that it has
+    variable width inputs and outputs. These parameters are set during
+    instantiation of the module.
+
+    This module selects one of four inputs based upon the select signal.
+
+    \paragraph{Testing}
+    \hfill\\
+
+    A 32 bit 4 input multiplexer is tested using the following cases:
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|c||c|}
+            \hline
+            Data 1 & Data 2 & Data 3 & Data 4 & Select & Output
+            \\\hline\hline
+            3 & 4 & 5 & 6 & 0 & 3
+            \\\hline
+            3 & 4 & 5 & 6 & 1 & 4
+            \\\hline
+            3 & 4 & 5 & 6 & 2 & 5
+            \\\hline
+            3 & 4 & 5 & 6 & 3 & 6
+            \\\hline
+            3 & 4 & 5 & 7 & 3 & 7
+            \\\hline
+        \end{tabular}
+    \end{center}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\paperwidth,center]{Screenshots/mux.png}
+        \caption{Simulation output of 32 bit 4 input multiplexer}
+    \end{figure}
+
+
+
+    \subsection{Sign Extender}
+
+    \paragraph{Inputs}
+    \begin{itemize}
+        \item Data In - Parameterized Width
+    \end{itemize}
+
+    \paragraph{Outputs}
+    \begin{itemize}
+        \item Data Out - Parameterized Width
+    \end{itemize}
+
+    \paragraph{Functionality}
+    \hfill\\
+
+    The sign extender is a parameterized module, meaning that it has
+    variable width inputs and outputs. These parameters are set during
+    instantiation of the module.
+
+    This module extends the width of the input data to defined output
+    width, maintaining the two's complement sign of the data.
+
+    \paragraph{Testing}
+    \hfill\\
+
+    A 16 bit to 32 bit sign extender is tested using the following cases:
+
+    \begin{center}
+        \begin{tabular}{|c||c|}
+            \hline
+            Data In [15:0] & Data Out [31:0]
+            \\\hline\hline
+            15 & 15
+            \\\hline
+            -15 & -15
+            \\\hline
+            255 & 255
+            \\\hline
+            -255 & -255
+            \\\hline
+            0 & 0
+            \\\hline
+        \end{tabular}
+    \end{center}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\paperwidth,center]{Screenshots/sign_extend.png}
+        \caption{Simulation output of 16 bit to 32 bit sign extender}
+    \end{figure}
+
+
+
+
+    \subsection{Register}
+
+    \paragraph{Inputs}
+    \begin{itemize}
+        \item Read 1 Address - 5 bit
+        \item Read 2 Address - 5 bit
+        \item Write Enable - 1 bit
+        \item Write Address - 5 bit
+        \item Data In - 32 bit
+    \end{itemize}
+
+    \paragraph{Outputs}
+    \begin{itemize}
+        \item Data Out 1 - 32 bit
+        \item Data Out 2 - 32 bit
+    \end{itemize}
+
+    \paragraph{Functionality}
+    \hfill\\
+
+    The register module stores 32 different 32 bit values. These values are
+    automatically read when either read address is changed. The address
+    corresponds to the register index.
+
+    On the positive edge of the write enable signal, the data from data in
+    is written to the specified write address.
+
+    \paragraph{Testing}
+    \hfill\\
+
+    The register module is tested by first reading the first register to
+    ensure that all registers are correctly initialized. Various values
+    are written to different registers and then read again to ensure that
+    the values were correctly written. The test cases are sequentially as
+    follows:
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            Read 1 Address & Read 2 Address & Write Enable & Write Address & Data In
+            \\\hline\hline
+            00 & 00 & 0 & 00 & 00000000
+            \\\hline
+            00 & 00 & 1 & 01 & ffffffff
+            \\\hline
+            00 & 01 & 0 & 00 & 00000000
+            \\\hline
+            01 & 00 & 0 & 02 & dddddddd
+            \\\hline
+            02 & 01 & 0 & 00 & 00000000
+            \\\hline
+            01 & 01 & 1 & 02 & bbbbbbbb
+            \\\hline
+            02 & 01 & 0 & 00 & 00000000
+            \\\hline
+        \end{tabular}
+    \end{center}
+
+    \begin{center}
+        \begin{tabular}{|c|c|}
+            \hline
+            Data 1 Out & Data 2 Out
+            \\\hline\hline
+            00000000 & 00000000
+            \\\hline
+            00000000 & 00000000
+            \\\hline
+            00000000 & ffffffff
+            \\\hline
+            ffffffff & 00000000
+            \\\hline
+            00000000 & ffffffff
+            \\\hline
+            ffffffff & ffffffff
+            \\\hline
+            bbbbbbbb & ffffffff
+            \\\hline
+        \end{tabular}
+    \end{center}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\paperwidth,center]{Screenshots/register.png}
+        \caption{Simulation output of the register module}
     \end{figure}
 
 

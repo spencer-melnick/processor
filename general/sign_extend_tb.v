@@ -25,7 +25,7 @@ module sign_extend_tb;
 		data_in = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/sign_extend_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/sign_extend_tv.txt", "r");
 		errors = 0;
 		status = 0;
 
