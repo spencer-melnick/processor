@@ -48,7 +48,7 @@ module alu_32_tb;
         clock = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/alu_32_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/alu_32_tv.txt", "r");
 		errors = 0;
 		status = 0;
 

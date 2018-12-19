@@ -44,7 +44,7 @@ module multiplier_32_tb;
 		ena = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/multiplier_32_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/multiplier_32_tv.txt", "r");
 		errors = 0;
 		status = 0;
 

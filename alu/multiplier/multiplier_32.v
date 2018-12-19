@@ -22,15 +22,15 @@ module multiplier_32(
 	always @(posedge rst) begin
 		// Convert operands to positive values
 		if (a[31] == 1'b0) begin
-			multiplier <= a;
+			multiplier = a;
 		end else begin
-			multiplier <= {32'b0, ~a} + 1;
+			multiplier = {32'b0, ~a} + 1;
 		end
 
 		if (b[31] == 1'b0) begin
-			multiplicand <= b;
+			multiplicand = b;
 		end else begin
-			multiplicand <= {32'b0, ~b} + 1;
+			multiplicand = {32'b0, ~b} + 1;
 		end
 
 		// Store resultant sign bit

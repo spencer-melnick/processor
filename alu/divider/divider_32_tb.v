@@ -47,7 +47,7 @@ module divider_32_tb;
 		ena = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../tv/divider_32_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/divider_32_tv.txt", "r");
 		errors = 0;
 		status = 0;
 
