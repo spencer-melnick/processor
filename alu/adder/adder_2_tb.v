@@ -1,18 +1,18 @@
 `timescale 1ns / 1ps
 
-module adder_32_tb;
+module adder_2_tb;
 
 	// Inputs
-	reg [31:0] a;
-	reg [31:0] b;
+	reg [1:0] a;
+	reg [1:0] b;
 	reg c_in;
 
 	// Outputs
-	wire [31:0] s;
+	wire [1:0] s;
 	wire c_out;
 
 	// Test vector outputs
-	reg [31:0] s_test;
+	reg [1:0] s_test;
 	reg c_out_test;
 
 	// Test values
@@ -21,7 +21,7 @@ module adder_32_tb;
 	integer status;
 
 	// Instantiate the Unit Under Test (UUT)
-	adder_32 uut (
+	adder_2 uut (
 		.s(s), 
 		.c_out(c_out),
 		.a(a), 
@@ -30,7 +30,7 @@ module adder_32_tb;
 	);
 
 	initial begin
-		$dumpfile("adder_32.vcd");
+		$dumpfile("adder_2.vcd");
 		$dumpvars;
 
 		// Initialize inputs
@@ -39,7 +39,7 @@ module adder_32_tb;
 		c_in = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../../processor/tv/adder_32_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/adder_2_tv.txt", "r");
 		errors = 0;
 		status = 0;
 
@@ -60,9 +60,9 @@ module adder_32_tb;
 
 			if (s != s_test || c_out != c_out_test) begin
 				$display("Error:");
-				$display("Inputs:               %-11d %-11d %-1d", a, b, c_in);
-				$display("Outputs:              %-11d %-1d", s, c_out);
-				$display("Expected outputs:     %-11d %-1d", s_test, c_out_test);
+				$display("Inputs:               %-1d %-1d %-1d", a, b, c_in);
+				$display("Outputs:              %-1d %-1d", s, c_out);
+				$display("Expected outputs:     %-1d %-1d", s_test, c_out_test);
 				errors = errors + 1;
 			end
 		end

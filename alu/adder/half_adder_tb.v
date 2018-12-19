@@ -1,19 +1,18 @@
 `timescale 1ns / 1ps
 
-module adder_32_tb;
+module half_adder_tb;
 
 	// Inputs
-	reg [31:0] a;
-	reg [31:0] b;
-	reg c_in;
+	reg a;
+	reg b;
 
 	// Outputs
-	wire [31:0] s;
-	wire c_out;
+	wire s;
+	wire c;
 
 	// Test vector outputs
-	reg [31:0] s_test;
-	reg c_out_test;
+	reg s_test;
+	reg c_test;
 
 	// Test values
 	integer errors;
@@ -21,25 +20,23 @@ module adder_32_tb;
 	integer status;
 
 	// Instantiate the Unit Under Test (UUT)
-	adder_32 uut (
+	half_adder uut (
 		.s(s), 
-		.c_out(c_out),
+		.c(c),
 		.a(a), 
-		.b(b), 
-		.c_in(c_in)
+		.b(b)
 	);
 
 	initial begin
-		$dumpfile("adder_32.vcd");
+		$dumpfile("half_adder.vcd");
 		$dumpvars;
 
 		// Initialize inputs
 		a = 0;
 		b = 0;
-		c_in = 0;
 
 		// Initialize test values
-		vector_file = $fopen("../../processor/tv/adder_32_tv.txt", "r");
+		vector_file = $fopen("../../processor/tv/half_adder_tv.txt", "r");
 		errors = 0;
 		status = 0;
 
@@ -53,16 +50,16 @@ module adder_32_tb;
 		#5;
 
 		while (!status) begin
-			status = $fscanf(vector_file, "%d %d %d : %d %d\n", a, b, c_in, s_test, c_out_test);
+			status = $fscanf(vector_file, "%d %d : %d %d\n", a, b, s_test, c_test);
 			status = $feof(vector_file);
 
 			#5;
 
-			if (s != s_test || c_out != c_out_test) begin
+			if (s != s_test || c != c_test) begin
 				$display("Error:");
-				$display("Inputs:               %-11d %-11d %-1d", a, b, c_in);
-				$display("Outputs:              %-11d %-1d", s, c_out);
-				$display("Expected outputs:     %-11d %-1d", s_test, c_out_test);
+				$display("Inputs:               %-1d %-1d ", a, b);
+				$display("Outputs:              %-1d %-1d", s, c);
+				$display("Expected outputs:     %-1d %-1d", s_test, c_test);
 				errors = errors + 1;
 			end
 		end
